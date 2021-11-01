@@ -1,0 +1,28 @@
+{
+  "name": "speed-down",
+  "version": "1.0.0",
+  "description": "speed-down, multiple connection(process)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "speed-down": "bin/speed-down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahkimkoo/speedup-download.git"
+  },
+  "keywords": [
+    "speed download",
+    "split",
+    "multipart",
+    "download"
+  ],
+  "author": "whisper",
+  "license": "BSD",
+  "dependencies": {
+    "request": "^2.88.2",
+    "request-progress": "^3.0.0"
+  }
+}
