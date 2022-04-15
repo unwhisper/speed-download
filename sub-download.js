@@ -6,16 +6,18 @@ process.send = process.send || function(msg) {
     console.log(msg)
 };
 
-const download = (key, url, headers, filepath, range_start, range_end, throttle) => {
+const download = (key, url, headers, filepath, range_start, range_end, throttle, proxy) => {
     let d_err;
     let header = Object.assign({
         'Range': 'bytes=' + range_start + '-' + range_end
     }, JSON.parse(headers));
-    let r = request({
+    let option = {
         uri: url, 
         rejectUnauthorized: false,
         headers: header
-    });
+    }
+    if(proxy) option.proxy = proxy
+    let r = request(option);
     progress(r, {
             'throttle': throttle
         })
@@ -58,10 +60,10 @@ if (require.main !== module) {
     if (process.argv.length < 9) {
         console.error('invalidate process arguments');
     } else {
-        let [_1, _2, key, url, headers, filepath, range_start, range_end, throttle] = process.argv;
+        let [_1, _2, key, url, headers, filepath, range_start, range_end, throttle, proxy] = process.argv;
         range_start = parseInt(range_start);
         range_end = parseInt(range_end);
         throttle = parseInt(throttle);
-        download(key, url, headers, filepath, range_start, range_end, throttle);
+        download(key, url, headers, filepath, range_start, range_end, throttle, proxy);
     }
 }

@@ -17,7 +17,8 @@ class Downloader {
             'continuingly': true, //breakpoint_continuingly
             'tmpdir': os.tmpdir(),
             'progress_throttle': 2000,
-            'headers': {}
+            'headers': {},
+            'proxy': null
         }, options);
         this.url = url;
         this.filename = filename;
@@ -34,6 +35,7 @@ class Downloader {
             rejectUnauthorized: false,
             headers: this.options.headers
         }
+        if(this.options.proxy) option.proxy = this.options.proxy
         return new Promise(resolve => {
             let r = request(option).on('response', response => {
                 r.abort();
@@ -161,7 +163,7 @@ class Downloader {
                 let thread_info = this.threads_info[k];
                 if (thread_info['progress'] < 1) {
                     let threadFilePath = path.resolve(this.options.tmpdir, k);
-                    let thread = cp.fork(path.resolve(__dirname,'sub-download.js'), [k, this.url, JSON.stringify(this.options.headers), threadFilePath, thread_info['start'].toString(), thread_info['end'].toString(), this.options.progress_throttle.toString()]);
+                    let thread = cp.fork(path.resolve(__dirname,'sub-download.js'), [k, this.url, JSON.stringify(this.options.headers), threadFilePath, thread_info['start'].toString(), thread_info['end'].toString(), this.options.progress_throttle.toString(), this.options.proxy.toString()]);
                     thread.on('message', (m) => {
                         if (m['progress']) {
                             thread_info['progress'] = m['progress']['percent'];
